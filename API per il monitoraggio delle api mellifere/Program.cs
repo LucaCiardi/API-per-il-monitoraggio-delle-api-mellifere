@@ -1,3 +1,4 @@
+using API_per_il_monitoraggio_delle_api_mellifere.Data;
 using API_per_il_monitoraggio_delle_api_mellifere.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -15,6 +16,12 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ContestoApiario>();
+    DbInitializer.Initialize(context);
+}
 
 // Configurazione del pipeline delle richieste HTTP
 if (app.Environment.IsDevelopment())
