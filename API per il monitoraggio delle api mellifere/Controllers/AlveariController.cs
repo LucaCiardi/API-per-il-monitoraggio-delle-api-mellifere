@@ -1,11 +1,13 @@
 ﻿using API_per_il_monitoraggio_delle_api_mellifere.Models;
 using API_per_il_monitoraggio_delle_api_mellifere.Services.DTOs;
 using API_per_il_monitoraggio_delle_api_mellifere.Services.Monitoring;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API_per_il_monitoraggio_delle_api_mellifere.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class AlveariController : ControllerBase
@@ -42,6 +44,17 @@ namespace API_per_il_monitoraggio_delle_api_mellifere.Controllers
         [HttpPost]
         public async Task<ActionResult<Alveare>> CreaAlveare(Alveare alveare)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (alveare.Temperatura < 10 || alveare.Temperatura > 40)
+            {
+                ModelState.AddModelError("Temperatura", "La temperatura deve essere compresa tra 10 e 40 gradi Celsius.");
+                return BadRequest(ModelState);
+            }
+
             _contesto.Alveari.Add(alveare);
             await _contesto.SaveChangesAsync();
 

@@ -9,6 +9,20 @@ namespace API_per_il_monitoraggio_delle_api_mellifere.Models
 
         public DbSet<Alveare> Alveari { get; set; }
         public DbSet<Misurazione> Misurazioni { get; set; }
+        public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+        }
     }
 
 }
