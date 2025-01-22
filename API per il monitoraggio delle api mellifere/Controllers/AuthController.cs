@@ -17,11 +17,14 @@ namespace API_per_il_monitoraggio_delle_api_mellifere.Controllers
     {
         private readonly ContestoApiario _context;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AlveariController> _logger;
 
-        public AuthController(ContestoApiario context, IConfiguration configuration)
+
+        public AuthController(ContestoApiario context, IConfiguration configuration, ILogger<AlveariController> logger)
         {
             _context = context;
             _configuration = configuration;
+            _logger = logger;
         }
 
         [HttpPost("login")]

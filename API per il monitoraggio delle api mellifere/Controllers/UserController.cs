@@ -20,11 +20,14 @@ namespace API_per_il_monitoraggio_delle_api_mellifere.Controllers
     {
         private readonly ContestoApiario _context;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AlveariController> _logger;
 
-        public UsersController(ContestoApiario context, IConfiguration configuration)
+
+        public UsersController(ContestoApiario context, IConfiguration configuration, ILogger<AlveariController> logger)
         {
             _context = context;
             _configuration = configuration;
+            _logger = logger;
         }
 
         // GET: api/Users

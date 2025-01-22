@@ -13,10 +13,12 @@ namespace API_per_il_monitoraggio_delle_api_mellifere.Controllers
     public class AlveariController : ControllerBase
     {
         private readonly ContestoApiario _contesto;
+        private readonly ILogger<AlveariController> _logger;
 
-        public AlveariController(ContestoApiario contesto)
+        public AlveariController(ContestoApiario contesto, ILogger<AlveariController> logger)
         {
             _contesto = contesto;
+            _logger = logger;
         }
 
         // GET: api/Alveari

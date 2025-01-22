@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +43,12 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+Log.Logger = new LoggerConfiguration()
+.WriteTo.Console()
+.WriteTo.File("logs/apiario.txt", rollingInterval: RollingInterval.Day)
+.CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Configurazione JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
