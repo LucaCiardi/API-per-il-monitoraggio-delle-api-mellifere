@@ -1,4 +1,4 @@
-using API_per_il_monitoraggio_delle_api_mellifere.Data;
+using API_per_il_monitoraggio_delle_api_mellifere.Data.Seeding;
 using API_per_il_monitoraggio_delle_api_mellifere.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;

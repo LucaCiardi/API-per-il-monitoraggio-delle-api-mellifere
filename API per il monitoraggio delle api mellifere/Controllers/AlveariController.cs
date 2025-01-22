@@ -1,4 +1,6 @@
 ﻿using API_per_il_monitoraggio_delle_api_mellifere.Models;
+using API_per_il_monitoraggio_delle_api_mellifere.Services.DTOs;
+using API_per_il_monitoraggio_delle_api_mellifere.Services.Monitoring;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -96,5 +98,57 @@ namespace API_per_il_monitoraggio_delle_api_mellifere.Controllers
         {
             return _contesto.Alveari.Any(e => e.Id == id);
         }
+        private async Task<List<double>> GetLast24HoursTemperatures(int alveareId)
+        {
+            var ventiquattroOreFA = DateTime.Now.AddHours(-24);
+            return await _contesto.Misurazioni
+                .Where(m => m.AlveareId == alveareId && m.Timestamp >= ventiquattroOreFA)
+                .OrderBy(m => m.Timestamp)
+                .Select(m => m.Temperatura)
+                .ToListAsync();
+        }
+
+        private async Task<List<double>> GetLast24HoursHumidity(int alveareId)
+        {
+            var ventiquattroOreFA = DateTime.Now.AddHours(-24);
+            return await _contesto.Misurazioni
+                .Where(m => m.AlveareId == alveareId && m.Timestamp >= ventiquattroOreFA)
+                .OrderBy(m => m.Timestamp)
+                .Select(m => m.Umidita)
+                .ToListAsync();
+        }
+
+        private async Task<List<double>> GetLast24HoursBeeActivity(int alveareId)
+        {
+            var ventiquattroOreFA = DateTime.Now.AddHours(-24);
+            return await _contesto.Misurazioni
+                .Where(m => m.AlveareId == alveareId && m.Timestamp >= ventiquattroOreFA)
+                .OrderBy(m => m.Timestamp)
+                .Select(m => m.AttivitaApi)
+                .ToListAsync();
+        }
+
+        [HttpGet("{id}/status")]
+        public async Task<ActionResult<HiveStatus>> GetHiveStatus(int id)
+        {
+            var alveare = await _contesto.Alveari.FindAsync(id);
+            if (alveare == null)
+            {
+                return NotFound();
+            }
+
+            var temperatures = await GetLast24HoursTemperatures(id);
+            var humidityLevels = await GetLast24HoursHumidity(id);
+            var beeActivity = await GetLast24HoursBeeActivity(id);
+
+            if (temperatures.Count == 0 && humidityLevels.Count == 0 && beeActivity.Count == 0)
+            {
+                return NotFound("No data available for the last 24 hours for this hive.");
+            }
+
+            var hiveStatus = HiveMonitoringSystem.MonitorHive(temperatures, humidityLevels, beeActivity);
+            return hiveStatus;
+        }
+
     }
 }

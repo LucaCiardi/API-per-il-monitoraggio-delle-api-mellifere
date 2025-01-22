@@ -4,6 +4,7 @@ using API_per_il_monitoraggio_delle_api_mellifere.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API_per_il_monitoraggio_delle_api_mellifere.Migrations
 {
     [DbContext(typeof(ContestoApiario))]
-    partial class ContestoApiarioModelSnapshot : ModelSnapshot
+    [Migration("20250122144256_NomeDellaMigrazione")]
+    partial class NomeDellaMigrazione
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
