@@ -1,0 +1,6 @@
+@API_per_il_monitoraggio_delle_api_mellifere_HostAddress = http://localhost:5285
+
+GET {{API_per_il_monitoraggio_delle_api_mellifere_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
